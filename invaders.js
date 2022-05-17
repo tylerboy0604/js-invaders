@@ -3,6 +3,12 @@ let player = {
     y: 580
 };
 
+let bullet = null;
+
+function update() {
+
+}
+
 function draw() {
     let canvas = document.getElementById('invaders-canvas');
     let context = canvas.getContext('2d');
@@ -21,6 +27,13 @@ function draw() {
     context.lineTo(player.x - 10, player.y + 20);
     context.lineTo(player.x + 10, player.y + 20);
     context.fill();
+
+    if(bullet != null) {
+        context.fillStyle = "red";
+        context.beginPath();
+        context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
+        context.fill();
+    }
 }
 
 function setup() {
@@ -43,9 +56,18 @@ function movePlayer(event) {
         case "ArrowDown":
             player.y += 10;
             break;
+
+        case " ":
+            bullet = {
+                x: player.x,
+                y: player.y
+            };
+            break;
     }
     draw();
 }
 
 window.addEventListener('load', setup);
 window.addEventListener('keydown', movePlayer);
+
+setInterval(update, 50);

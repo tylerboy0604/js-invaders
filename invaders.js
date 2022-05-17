@@ -5,8 +5,40 @@ let player = {
 
 let bullet = null;
 
-function update() {
+let direction = {
+    left: false,
+    right: false,
+    up: false,
+    down: false,
+};
 
+function update() {
+    if(direction.left == true) {
+        if(player.x > 10) {
+            player.x -= 10;
+        }
+    }
+    if(direction.right == true) {
+        if(player.x < 790) {
+            player.x += 10;
+        }
+    }
+    if(direction.up == true) {
+        if(player.y > 0) {
+            player.y -= 10;
+        }
+    }
+    if(direction.down == true) {
+        if(player.y < 580) {
+            player.y += 10;
+        }
+    }
+
+    if(bullet != null) {
+        bullet.y -= 10;
+    }
+
+    draw();
 }
 
 function draw() {
@@ -40,21 +72,25 @@ function setup() {
     draw();
 }
 
-function movePlayer(event) {
+function keyDown(event) {
     switch(event.key) {
         case "ArrowLeft":
-            player.x -= 10;
+            direction.left = true;
+            // player.x -= 10;
             break;
         case "ArrowRight":
-            player.x += 10;
+            direction.right = true;
+            // player.x += 10;
             break;
 
         case "ArrowUp":
-            player.y -= 10;
+            direction.up = true;
+            // player.y -= 10;
             break;
 
         case "ArrowDown":
-            player.y += 10;
+            direction.down = true;
+            // player.y += 10;
             break;
 
         case " ":
@@ -64,10 +100,29 @@ function movePlayer(event) {
             };
             break;
     }
-    draw();
+}
+
+function keyUp(event) {
+    switch(event.key) {
+        case "ArrowLeft":
+            direction.left = false;
+            break;
+        case "ArrowRight":
+            direction.right = false;
+            break;
+
+        case "ArrowUp":
+            direction.up = false;
+            break;
+
+        case "ArrowDown":
+            direction.down = false;
+            break;
+    }
 }
 
 window.addEventListener('load', setup);
-window.addEventListener('keydown', movePlayer);
+window.addEventListener('keydown', keyDown);
+window.addEventListener('keyup', keyUp);
 
 setInterval(update, 50);

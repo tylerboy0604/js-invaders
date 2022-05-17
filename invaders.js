@@ -1,5 +1,6 @@
 let player = {
-    x: 400
+    x: 400,
+    y: 580
 };
 
 function draw() {
@@ -16,9 +17,9 @@ function draw() {
     context.fillStyle = "yellow";
     // context.fillRect(390, 580, 20, 20);
     context.beginPath();
-    context.moveTo(player.x, 580);
-    context.lineTo(player.x - 10, 600);
-    context.lineTo(player.x + 10, 600);
+    context.moveTo(player.x, player.y);
+    context.lineTo(player.x - 10, player.y + 20);
+    context.lineTo(player.x + 10, player.y + 20);
     context.fill();
 }
 
@@ -35,6 +36,13 @@ function movePlayer(event) {
             player.x += 10;
             break;
 
+        case "ArrowUp":
+            player.y -= 10;
+            break;
+
+        case "ArrowDown":
+            player.y += 10;
+            break;
     }
     draw();
 }

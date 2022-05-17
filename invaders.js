@@ -5,6 +5,13 @@ let player = {
 
 let bullet = null;
 
+function update() {
+    if(bullet != null) {
+        bullet.y -= 10;
+    }
+    drawPlayer();
+}
+
 function setup() {
     let canvas = document.getElementById('invaders-canvas');
     let context = canvas.getContext('2d');
@@ -15,8 +22,6 @@ function setup() {
     context.fillStyle = 'white';
     context.font = '48px Verdana';
     context.fillText("Space Invaders", 10, 50);
-
-    drawPlayer();
 }
 
 function drawPlayer() {
@@ -65,8 +70,9 @@ function movePlayer(event) {
             break;
     }
 
-    drawPlayer();
 }
 
 window.addEventListener('load', setup);
 window.addEventListener('keydown', movePlayer);
+
+setInterval(update, 50)

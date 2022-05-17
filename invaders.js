@@ -3,11 +3,37 @@ let player = {
     y: 580
 };
 
-let bullet = null;
+let bullets = [];
+
+let keys = {
+    up: false,
+    down: false,
+    right: false,
+    left: false
+};
 
 function update() {
-    if(bullet != null) {
-        bullet.y -= 10;
+    if(keys.left) {
+        if(player.x > 10) {
+            player.x -= 10;
+        }
+    }
+    if(keys.right) {
+        player.x += 10;
+    }
+    if(keys.up) {
+        player.y -= 10;
+    }
+    if(keys.down) {
+        player.y += 10;
+    }
+
+    for(let index = 0; index < bullets.length; index++) {
+        if(bullets[index].y < 0) {
+            bullets.splice(index, 1);
+        } else {
+            bullets[index].y -= 10;
+        }
     }
     drawPlayer();
 }
@@ -39,10 +65,10 @@ function drawPlayer() {
     context.lineTo(player.x + 10, player.y + 20);
     context.fill();
 
-    if(bullet != null) {
+    for(let index = 0; index < bullets.length; index++) {
         context.fillStyle = "red";
         context.beginPath();
-        context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
+        context.arc(bullets[index].x, bullets[index].y, 5, 0, Math.PI * 2);
         context.fill();
     }
 }
@@ -50,29 +76,47 @@ function drawPlayer() {
 function movePlayer(event) {
     switch(event.key) {
         case "ArrowLeft":
-            player.x -= 10;
+            keys.left = true;
             break;
         case "ArrowRight":
-            player.x += 10;
+            keys.right = true;
             break;
         case "ArrowUp":
-            player.y -= 10;
+            keys.up = true;
             break;
         case "ArrowDown":
-            player.y += 10;
+            keys.down = true;
             break;
 
         case " ":
-            bullet = {
+            bullets.push( {
                 x: player.x,
                 y: player.y
-            };
+            } );
             break;
     }
 
 }
 
+function keyUp(event) {
+    switch(event.key) {
+        case "ArrowLeft":
+            keys.left = false;
+            break;
+        case "ArrowRight":
+            keys.right = false;
+            break;
+        case "ArrowUp":
+            keys.up = false;
+            break;
+        case "ArrowDown":
+            keys.down = false;
+            break;
+    }
+}
+
 window.addEventListener('load', setup);
 window.addEventListener('keydown', movePlayer);
+window.addEventListener('keyup', keyUp);
 
 setInterval(update, 50)

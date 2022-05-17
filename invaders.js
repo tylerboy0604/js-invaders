@@ -3,7 +3,7 @@ let player = {
     y: 580
 };
 
-let bullet = null;
+let bullets = [];
 
 let direction = {
     left: false,
@@ -34,8 +34,9 @@ function update() {
         }
     }
 
-    if(bullet != null) {
-        bullet.y -= 10;
+    // update()
+    for(let index = 0; index < bullets.length; index++) {
+        bullets[index].y -= 10;
     }
 
     draw();
@@ -60,12 +61,21 @@ function draw() {
     context.lineTo(player.x + 10, player.y + 20);
     context.fill();
 
-    if(bullet != null) {
+    // draw()
+    for(let index = 0; index < bullets.length; index++) {
+        const bullet = bullets[index];
         context.fillStyle = "red";
         context.beginPath();
         context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
         context.fill();
     }
+
+    // if(bullet != null) {
+    //     context.fillStyle = "red";
+    //     context.beginPath();
+    //     context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
+    //     context.fill();
+    // }
 }
 
 function setup() {
@@ -94,10 +104,10 @@ function keyDown(event) {
             break;
 
         case " ":
-            bullet = {
+            bullets.push({
                 x: player.x,
                 y: player.y
-            };
+            });
             break;
     }
 }

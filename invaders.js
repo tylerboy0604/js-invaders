@@ -1,6 +1,65 @@
+class Bullet {
+    x;
+    y;
+
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    update() {
+        this.y -= 10;
+    }
+
+    draw(context) {
+        context.fillStyle = "red";
+        context.beginPath();
+        context.arc(this.x, this.y, 5, 0, Math.PI * 2);
+        context.fill();
+    }
+}
+
+// new Bullet(20, 10);
+
 let player = {
     x: 400,
-    y: 580
+    y: 580,
+
+    shoot: function() {
+        return new Bullet(this.x, this.y);
+    },
+
+    update: function() {
+        if(direction.left == true) {
+            if(this.x > 10) {
+                this.x -= 10;
+            }
+        }
+        if(direction.right == true) {
+            if(this.x < 790) {
+                this.x += 10;
+            }
+        }
+        if(direction.up == true) {
+            if(this.y > 0) {
+                this.y -= 10;
+            }
+        }
+        if(direction.down == true) {
+            if(this.y < 580) {
+                this.y += 10;
+            }
+        }
+    },
+
+    draw: function(context) {
+        context.fillStyle = "yellow";
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.x - 10, this.y + 20);
+        context.lineTo(this.x + 10, this.y + 20);
+        context.fill();
+    }
 };
 
 let bullets = [];
@@ -13,30 +72,12 @@ let direction = {
 };
 
 function update() {
-    if(direction.left == true) {
-        if(player.x > 10) {
-            player.x -= 10;
-        }
-    }
-    if(direction.right == true) {
-        if(player.x < 790) {
-            player.x += 10;
-        }
-    }
-    if(direction.up == true) {
-        if(player.y > 0) {
-            player.y -= 10;
-        }
-    }
-    if(direction.down == true) {
-        if(player.y < 580) {
-            player.y += 10;
-        }
-    }
+    player.update();
 
     // update()
     for(let index = 0; index < bullets.length; index++) {
-        bullets[index].y -= 10;
+        const bullet = bullets[index];
+        bullet.update();
     }
 
     draw();
@@ -53,29 +94,14 @@ function draw() {
     context.font = '48px serif';
     context.fillText("Space Invaders", 10, 50);
 
-    context.fillStyle = "yellow";
-    // context.fillRect(390, 580, 20, 20);
-    context.beginPath();
-    context.moveTo(player.x, player.y);
-    context.lineTo(player.x - 10, player.y + 20);
-    context.lineTo(player.x + 10, player.y + 20);
-    context.fill();
+    player.draw(context);
 
     // draw()
     for(let index = 0; index < bullets.length; index++) {
         const bullet = bullets[index];
-        context.fillStyle = "red";
-        context.beginPath();
-        context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
-        context.fill();
+        bullet.draw(context);
     }
 
-    // if(bullet != null) {
-    //     context.fillStyle = "red";
-    //     context.beginPath();
-    //     context.arc(bullet.x, bullet.y, 5, 0, Math.PI * 2);
-    //     context.fill();
-    // }
 }
 
 function setup() {
@@ -86,28 +112,22 @@ function keyDown(event) {
     switch(event.key) {
         case "ArrowLeft":
             direction.left = true;
-            // player.x -= 10;
             break;
         case "ArrowRight":
             direction.right = true;
-            // player.x += 10;
             break;
 
         case "ArrowUp":
             direction.up = true;
-            // player.y -= 10;
             break;
 
         case "ArrowDown":
             direction.down = true;
-            // player.y += 10;
             break;
 
         case " ":
-            bullets.push({
-                x: player.x,
-                y: player.y
-            });
+            let bullet = player.shoot();
+            bullets.push( bullet );
             break;
     }
 }

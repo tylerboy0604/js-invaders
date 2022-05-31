@@ -1,6 +1,6 @@
 let player = {
     x: 400,
-    y: 580
+    y: 580,
 };
 
 let bullets = [];
@@ -9,27 +9,28 @@ let keys = {
     up: false,
     down: false,
     right: false,
-    left: false
+    left: false,
 };
 
 function update() {
-    if(keys.left) {
-        if(player.x > 10) {
-            player.x -= 10;
-        }
+    if (keys.left && player.x > 10) {
+        player.x -= 10;
     }
-    if(keys.right) {
+
+    if (keys.right && player.x < 790) {
         player.x += 10;
     }
-    if(keys.up) {
+
+    if (keys.up && player.y > 0) {
         player.y -= 10;
     }
-    if(keys.down) {
+    
+    if (keys.down && player.y < 580) {
         player.y += 10;
     }
 
-    for(let index = 0; index < bullets.length; index++) {
-        if(bullets[index].y < 0) {
+    for (let index = 0; index < bullets.length; index++) {
+        if (bullets[index].y < 0) {
             bullets.splice(index, 1);
         } else {
             bullets[index].y -= 10;
@@ -39,24 +40,24 @@ function update() {
 }
 
 function setup() {
-    let canvas = document.getElementById('invaders-canvas');
-    let context = canvas.getContext('2d');
+    let canvas = document.getElementById("invaders-canvas");
+    let context = canvas.getContext("2d");
 
-    context.fillStyle = 'black';
+    context.fillStyle = "black";
     context.fillRect(0, 0, 800, 600);
 
-    context.fillStyle = 'white';
-    context.font = '48px Verdana';
+    context.fillStyle = "white";
+    context.font = "48px Verdana";
     context.fillText("Space Invaders", 10, 50);
 }
 
 function drawPlayer() {
-    let canvas = document.getElementById('invaders-canvas');
-    let context = canvas.getContext('2d');
+    let canvas = document.getElementById("invaders-canvas");
+    let context = canvas.getContext("2d");
 
-    context.fillStyle = 'black';
+    context.fillStyle = "black";
     context.fillRect(0, 0, 800, 600);
-    
+
     context.fillStyle = "pink";
     // context.fillRect(390, 580, 20, 20);
     context.beginPath();
@@ -65,7 +66,7 @@ function drawPlayer() {
     context.lineTo(player.x + 10, player.y + 20);
     context.fill();
 
-    for(let index = 0; index < bullets.length; index++) {
+    for (let index = 0; index < bullets.length; index++) {
         context.fillStyle = "red";
         context.beginPath();
         context.arc(bullets[index].x, bullets[index].y, 5, 0, Math.PI * 2);
@@ -74,7 +75,7 @@ function drawPlayer() {
 }
 
 function movePlayer(event) {
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowLeft":
             keys.left = true;
             break;
@@ -89,17 +90,16 @@ function movePlayer(event) {
             break;
 
         case " ":
-            bullets.push( {
+            bullets.push({
                 x: player.x,
-                y: player.y
-            } );
+                y: player.y,
+            });
             break;
     }
-
 }
 
 function keyUp(event) {
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowLeft":
             keys.left = false;
             break;
@@ -115,8 +115,8 @@ function keyUp(event) {
     }
 }
 
-window.addEventListener('load', setup);
-window.addEventListener('keydown', movePlayer);
-window.addEventListener('keyup', keyUp);
+window.addEventListener("load", setup);
+window.addEventListener("keydown", movePlayer);
+window.addEventListener("keyup", keyUp);
 
-setInterval(update, 50)
+setInterval(update, 50);

@@ -1,6 +1,34 @@
 let player = {
     x: 400,
     y: 580,
+
+    update: function() {
+        if (keys.left && this.x > 10) {
+            this.x -= 10;
+        }
+    
+        if (keys.right && this.x < 790) {
+            this.x += 10;
+        }
+    
+        if (keys.up && this.y > 0) {
+            this.y -= 10;
+        }
+        
+        if (keys.down && this.y < 580) {
+            this.y += 10;
+        }
+    },
+
+    draw: function(context) {
+        context.fillStyle = "pink";
+        // context.fillRect(390, 580, 20, 20);
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.x - 10, this.y + 20);
+        context.lineTo(this.x + 10, this.y + 20);
+        context.fill();
+    }
 };
 
 let bullets = [];
@@ -13,21 +41,7 @@ let keys = {
 };
 
 function update() {
-    if (keys.left && player.x > 10) {
-        player.x -= 10;
-    }
-
-    if (keys.right && player.x < 790) {
-        player.x += 10;
-    }
-
-    if (keys.up && player.y > 0) {
-        player.y -= 10;
-    }
-    
-    if (keys.down && player.y < 580) {
-        player.y += 10;
-    }
+    player.update();
 
     for (let index = 0; index < bullets.length; index++) {
         if (bullets[index].y < 0) {
@@ -58,13 +72,7 @@ function drawPlayer() {
     context.fillStyle = "black";
     context.fillRect(0, 0, 800, 600);
 
-    context.fillStyle = "pink";
-    // context.fillRect(390, 580, 20, 20);
-    context.beginPath();
-    context.moveTo(player.x, player.y);
-    context.lineTo(player.x - 10, player.y + 20);
-    context.lineTo(player.x + 10, player.y + 20);
-    context.fill();
+    player.draw(context);
 
     for (let index = 0; index < bullets.length; index++) {
         context.fillStyle = "red";

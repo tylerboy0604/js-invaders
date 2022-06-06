@@ -1,6 +1,67 @@
+class Bullet {
+    x;
+    y;
+
+
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+
+
+
+    update() {
+        this.y -= 10
+    }
+
+
+
+    draw(context){
+        context.fillStyle = "red";
+        context.beginPath();
+        context.arc(this.x, this.y, 5, 0, Math.PI * 2);
+        context.fill();
+    }
+}
+
+
+
 let player = {
     x: 400,
-    y: 580
+    y: 580,
+
+    update: function () {
+        if (keys.left && this.x > 10) {
+            this.x -= 10;
+        }
+
+        if (keys.right && this.x < 790) {
+
+            this.x += 10;
+        }
+
+        if (keys.up && this.y > 0) {
+
+            this.y -= 10;
+        }
+
+        if (keys.down && this.y < 580) {
+
+            this.y += 10;
+        }
+
+    },
+
+    draw: function (context) {
+        context.fillStyle = "#39FF14";
+        // context.fillRect(390, 580, 20, 20);
+        context.beginPath();
+        context.moveTo(this.x, this.y);
+        context.lineTo(this.x - 10, this.y + 20);
+        context.lineTo(this.x + 10, this.y + 20);
+        context.fill();
+    }
 };
 
 let bullets = [];
@@ -13,23 +74,10 @@ let keys = {
 };
 
 function update() {
-    if(keys.left) {
-        if(player.x > 10) {
-            player.x -= 10;
-        }
-    }
-    if(keys.right) {
-        player.x += 10;
-    }
-    if(keys.up) {
-        player.y -= 10;
-    }
-    if(keys.down) {
-        player.y += 10;
-    }
+    player.update();
 
-    for(let index = 0; index < bullets.length; index++) {
-        if(bullets[index].y < 0) {
+    for (let index = 0; index < bullets.length; index++) {
+        if (bullets[index].y < 0) {
             bullets.splice(index, 1);
         } else {
             bullets[index].y -= 10;
@@ -56,25 +104,20 @@ function drawPlayer() {
 
     context.fillStyle = 'black';
     context.fillRect(0, 0, 800, 600);
-    
-    context.fillStyle = "pink";
-    // context.fillRect(390, 580, 20, 20);
-    context.beginPath();
-    context.moveTo(player.x, player.y);
-    context.lineTo(player.x - 10, player.y + 20);
-    context.lineTo(player.x + 10, player.y + 20);
-    context.fill();
 
-    for(let index = 0; index < bullets.length; index++) {
-        context.fillStyle = "red";
-        context.beginPath();
-        context.arc(bullets[index].x, bullets[index].y, 5, 0, Math.PI * 2);
-        context.fill();
+    player.draw(context);
+
+    for (let index = 0; index < bullets.length; index++) {
+        bullets[index].draw(context);
     }
+
+
+
+
 }
 
 function movePlayer(event) {
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowLeft":
             keys.left = true;
             break;
@@ -89,17 +132,15 @@ function movePlayer(event) {
             break;
 
         case " ":
-            bullets.push( {
-                x: player.x,
-                y: player.y
-            } );
+            let bullet = new Bullet(player.x, player.y);
+            bullets.push(bullet)
             break;
     }
 
 }
 
 function keyUp(event) {
-    switch(event.key) {
+    switch (event.key) {
         case "ArrowLeft":
             keys.left = false;
             break;

@@ -31,30 +31,26 @@ let player = {
     x: 400,
     y: 580,
 
-    update: function () {
+    update: function() {
         if (keys.left && this.x > 10) {
             this.x -= 10;
         }
-
+    
         if (keys.right && this.x < 790) {
-
             this.x += 10;
         }
-
+    
         if (keys.up && this.y > 0) {
-
             this.y -= 10;
         }
-
+        
         if (keys.down && this.y < 580) {
-
             this.y += 10;
         }
-
     },
 
-    draw: function (context) {
-        context.fillStyle = "#39FF14";
+    draw: function(context) {
+        context.fillStyle = "pink";
         // context.fillRect(390, 580, 20, 20);
         context.beginPath();
         context.moveTo(this.x, this.y);
@@ -70,7 +66,7 @@ let keys = {
     up: false,
     down: false,
     right: false,
-    left: false
+    left: false,
 };
 
 function update() {
@@ -87,28 +83,31 @@ function update() {
 }
 
 function setup() {
-    let canvas = document.getElementById('invaders-canvas');
-    let context = canvas.getContext('2d');
+    let canvas = document.getElementById("invaders-canvas");
+    let context = canvas.getContext("2d");
 
-    context.fillStyle = 'black';
+    context.fillStyle = "black";
     context.fillRect(0, 0, 800, 600);
 
-    context.fillStyle = 'white';
-    context.font = '48px Verdana';
+    context.fillStyle = "white";
+    context.font = "48px Verdana";
     context.fillText("Space Invaders", 10, 50);
 }
 
 function drawPlayer() {
-    let canvas = document.getElementById('invaders-canvas');
-    let context = canvas.getContext('2d');
+    let canvas = document.getElementById("invaders-canvas");
+    let context = canvas.getContext("2d");
 
-    context.fillStyle = 'black';
+    context.fillStyle = "black";
     context.fillRect(0, 0, 800, 600);
 
     player.draw(context);
 
     for (let index = 0; index < bullets.length; index++) {
-        bullets[index].draw(context);
+        context.fillStyle = "red";
+        context.beginPath();
+        context.arc(bullets[index].x, bullets[index].y, 5, 0, Math.PI * 2);
+        context.fill();
     }
 
 
@@ -132,11 +131,12 @@ function movePlayer(event) {
             break;
 
         case " ":
-            let bullet = new Bullet(player.x, player.y);
-            bullets.push(bullet)
+            bullets.push({
+                x: player.x,
+                y: player.y,
+            });
             break;
     }
-
 }
 
 function keyUp(event) {
@@ -156,8 +156,8 @@ function keyUp(event) {
     }
 }
 
-window.addEventListener('load', setup);
-window.addEventListener('keydown', movePlayer);
-window.addEventListener('keyup', keyUp);
+window.addEventListener("load", setup);
+window.addEventListener("keydown", movePlayer);
+window.addEventListener("keyup", keyUp);
 
-setInterval(update, 50)
+setInterval(update, 50);
